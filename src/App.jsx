@@ -559,8 +559,8 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-slate-200 print:bg-white flex justify-center">
-      {/* Container Mobile (max-w: 400px), tampil sama persis saat di-print ke PDF */}
-      <div className="w-full max-w-[400px] bg-slate-50 min-h-screen print:min-h-0 flex flex-col relative shadow-xl print:shadow-none print:border print:border-slate-200 print:rounded-xl pb-20 print:pb-2">
+      {/* Container Mobile (max-w: 400px), disembunyikan saat cetak PDF */}
+      <div className="w-full max-w-[400px] bg-slate-50 min-h-screen flex flex-col relative shadow-xl pb-20 print:hidden">
         
         {/* Notifikasi Toast */}
         {notif && (
@@ -954,6 +954,172 @@ export default function App() {
           </button>
         </nav>
 
+      </div>
+
+      {/* =====================================================================
+          TAMPILAN CETAK PDF (Tabel Rekapan Menarik & Rapi Tanpa Kolom TTD)
+         ===================================================================== */}
+      <div className="hidden print:block w-full max-w-4xl mx-auto p-6 bg-white text-slate-800 font-sans">
+        {/* Header Banner Modern */}
+        <div className="flex items-center justify-between border-b-4 border-blue-700 pb-4 mb-5">
+          <div className="flex items-center gap-4">
+            <img
+              src="image_f90204.png"
+              alt="Indofood CBP"
+              className="h-11 object-contain"
+            />
+            <div className="border-l-2 border-slate-200 pl-4">
+              <h1 className="text-lg font-extrabold text-slate-900 tracking-tight">
+                REKAPAN ABSENSI LEMBUR KARYAWAN
+              </h1>
+              <p className="text-xs text-slate-500 font-medium">
+                Periode Cut-Off: <span className="text-blue-700 font-bold">{periodeLabel}</span>
+              </p>
+            </div>
+          </div>
+          <div className="bg-blue-50 border border-blue-200 rounded-xl px-4 py-2 text-right">
+            <span className="text-[10px] font-bold uppercase tracking-wider text-blue-600 block">
+              Bulan Rekapan
+            </span>
+            <span className="text-sm font-extrabold text-blue-900">
+              {NAMA_BULAN[selectedMonth]} {selectedYear}
+            </span>
+          </div>
+        </div>
+
+        {/* Kartu Ringkasan Informasi & Total (Grid 4 Kolom Menarik) */}
+        <div className="grid grid-cols-4 gap-3 mb-5">
+          <div className="bg-slate-50 border border-slate-200 rounded-xl p-3">
+            <span className="text-[10px] font-bold uppercase text-slate-400 block">
+              Nama Karyawan
+            </span>
+            <span className="text-sm font-bold text-slate-800 mt-0.5 block truncate">
+              {nama.trim() || 'Karyawan'}
+            </span>
+            <span className="text-[11px] text-slate-500 mt-0.5 block">
+              Gapok: {formatRupiah(gapokNumber)}
+            </span>
+          </div>
+
+          <div className="bg-slate-50 border border-slate-200 rounded-xl p-3">
+            <span className="text-[10px] font-bold uppercase text-slate-400 block">
+              Total Jam Aktual
+            </span>
+            <span className="text-base font-extrabold text-slate-800 mt-0.5 block">
+              {totalAktual} Jam
+            </span>
+            <span className="text-[11px] text-slate-500 mt-0.5 block">
+              {sortedForPrint.length} Hari Lembur
+            </span>
+          </div>
+
+          <div className="bg-slate-50 border border-slate-200 rounded-xl p-3">
+            <span className="text-[10px] font-bold uppercase text-slate-400 block">
+              Total Jam Efektif
+            </span>
+            <span className="text-base font-extrabold text-blue-700 mt-0.5 block">
+              {totalEfektif} Jam
+            </span>
+            <span className="text-[11px] text-slate-500 mt-0.5 block">
+              Tarif/Jam: {formatRupiah(Math.round(gapokNumber / 173))}
+            </span>
+          </div>
+
+          <div className="bg-gradient-to-br from-blue-600 to-blue-800 text-white rounded-xl p-3 shadow-sm">
+            <span className="text-[10px] font-bold uppercase text-blue-100 block">
+              Total Estimasi Lembur
+            </span>
+            <span className="text-base font-extrabold mt-0.5 block">
+              {formatRupiah(totalRupiah)}
+            </span>
+            <span className="text-[10px] text-blue-200 mt-0.5 block">
+              Akumulasi Periode Ini
+            </span>
+          </div>
+        </div>
+
+        {/* Tabel Rekapan Lembur Modern */}
+        <div className="rounded-xl overflow-hidden border border-slate-300 shadow-xs">
+          <table className="w-full border-collapse text-xs">
+            <thead>
+              <tr className="bg-blue-700 text-white uppercase tracking-wider text-[11px]">
+                <th className="py-2.5 px-3 text-center w-10 font-bold">No</th>
+                <th className="py-2.5 px-3 text-left font-bold">Tanggal</th>
+                <th className="py-2.5 px-3 text-left font-bold">Hari</th>
+                <th className="py-2.5 px-3 text-center font-bold">Kategori Kalender Pabrik</th>
+                <th className="py-2.5 px-3 text-center font-bold">Jam Aktual</th>
+                <th className="py-2.5 px-3 text-center font-bold">Jam Efektif</th>
+                <th className="py-2.5 px-3 text-right font-bold">Estimasi Upah</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-200">
+              {sortedForPrint.length === 0 ? (
+                <tr>
+                  <td colSpan={7} className="py-8 text-center text-slate-400 italic">
+                    Belum ada data lembur pada periode {periodeLabel}.
+                  </td>
+                </tr>
+              ) : (
+                sortedForPrint.map((item, idx) => {
+                  const infoHari = cekHariLiburPabrik(item.tanggal);
+                  return (
+                    <tr key={item.id} className="even:bg-slate-50">
+                      <td className="py-2 px-3 text-center text-slate-500 font-medium">
+                        {idx + 1}
+                      </td>
+                      <td className="py-2 px-3 font-bold text-slate-800">
+                        {item.tanggal}
+                      </td>
+                      <td className="py-2 px-3 text-slate-700 font-medium">
+                        {infoHari.namaHari}
+                      </td>
+                      <td className="py-2 px-3 text-center">
+                        <span className={`inline-block px-2.5 py-0.5 rounded-full text-[10px] font-bold ${
+                          item.isLibur
+                            ? 'bg-red-100 text-red-700 border border-red-200'
+                            : 'bg-emerald-100 text-emerald-700 border border-emerald-200'
+                        }`}>
+                          {item.isLibur ? 'Hari Libur' : 'Hari Biasa'}
+                        </span>
+                      </td>
+                      <td className="py-2 px-3 text-center font-semibold text-slate-700">
+                        {item.durasiAktual} Jam
+                      </td>
+                      <td className="py-2 px-3 text-center font-bold text-blue-700">
+                        {item.durasiEfektif} Jam
+                      </td>
+                      <td className="py-2 px-3 text-right font-bold text-slate-900">
+                        {formatRupiah(item.estimasiUang)}
+                      </td>
+                    </tr>
+                  );
+                })
+              )}
+            </tbody>
+            <tfoot>
+              <tr className="bg-blue-50 border-t-2 border-blue-300 font-extrabold text-slate-900 text-xs">
+                <td colSpan={4} className="py-2.5 px-3 text-right uppercase text-blue-900">
+                  Total Keseluruhan
+                </td>
+                <td className="py-2.5 px-3 text-center text-slate-800">
+                  {totalAktual} Jam
+                </td>
+                <td className="py-2.5 px-3 text-center text-blue-800">
+                  {totalEfektif} Jam
+                </td>
+                <td className="py-2.5 px-3 text-right text-blue-800 text-sm">
+                  {formatRupiah(totalRupiah)}
+                </td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+
+        {/* Footer Kecil */}
+        <div className="mt-4 flex justify-between items-center text-[10px] text-slate-400">
+          <span>Dicetak pada: {new Date().toLocaleString('id-ID')}</span>
+          <span>Author by Muhammad Padli Azhim</span>
+        </div>
       </div>
     </div>
   );
