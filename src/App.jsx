@@ -559,12 +559,12 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-slate-200 print:bg-white flex justify-center">
-      {/* Container Mobile (max-w: 400px), disembunyikan saat cetak PDF */}
-      <div className="w-full max-w-[400px] bg-slate-50 min-h-screen flex flex-col relative shadow-xl pb-20 print:hidden">
+      {/* Container Mobile (max-w: 400px), tampil sama persis saat di-print ke PDF */}
+      <div className="w-full max-w-[400px] bg-slate-50 min-h-screen print:min-h-0 flex flex-col relative shadow-xl print:shadow-none print:border print:border-slate-200 print:rounded-xl pb-20 print:pb-2">
         
         {/* Notifikasi Toast */}
         {notif && (
-          <div className={`fixed top-4 left-1/2 -translate-x-1/2 z-50 px-4 py-2.5 rounded-lg shadow-lg text-white text-sm font-medium flex items-center gap-2 transition-all max-w-[360px] w-full ${
+          <div className={`fixed top-4 left-1/2 -translate-x-1/2 z-50 px-4 py-2.5 rounded-lg shadow-lg text-white text-sm font-medium flex items-center gap-2 transition-all max-w-[360px] w-full print:hidden ${
             notif.tipe === 'error' ? 'bg-red-600' : 'bg-emerald-600'
           }`}>
             {notif.tipe === 'error' ? <AlertCircle size={18} /> : <CheckCircle2 size={18} />}
@@ -573,7 +573,7 @@ export default function App() {
         )}
 
         {/* ================= HEADER ================= */}
-        <header className="bg-white border-b-4 border-blue-700 px-4 pt-4 pb-3 sticky top-0 z-20 shadow-sm">
+        <header className="bg-white border-b-4 border-blue-700 px-4 pt-4 pb-3 sticky top-0 z-20 shadow-sm print:static">
           <img 
             src="image_f90204.png" 
             alt="Indofood CBP" 
@@ -582,7 +582,7 @@ export default function App() {
           <div className="mt-3 bg-blue-600 text-white px-4 py-2 rounded-lg shadow-inner text-center font-semibold text-sm tracking-wide">
             Halo, {nama.trim() ? nama : 'Karyawan'}
           </div>
-          <div className="mt-1.5 flex items-center justify-center gap-1 text-[11px] text-emerald-600 font-medium">
+          <div className="mt-1.5 flex items-center justify-center gap-1 text-[11px] text-emerald-600 font-medium print:hidden">
             <CheckCircle2 size={13} />
             <span>{autoSaveStatus}</span>
           </div>
@@ -720,10 +720,10 @@ export default function App() {
                 </h2>
                 <button
                   onClick={handlePrintPDF}
-                  className="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold px-3 py-2 rounded-lg shadow-sm flex items-center gap-1.5 transition cursor-pointer"
+                  className="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold px-3 py-2 rounded-lg shadow-sm flex items-center gap-1.5 transition cursor-pointer print:hidden"
                 >
                   <Printer size={15} />
-                  Cetak PDF (HRD)
+                  Cetak PDF
                 </button>
               </div>
 
@@ -835,7 +835,7 @@ export default function App() {
                         <button
                           onClick={() => handleHapusLembur(item.id)}
                           title="Hapus"
-                          className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition cursor-pointer"
+                          className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition cursor-pointer print:hidden"
                         >
                           <Trash2 size={16} />
                         </button>
@@ -919,7 +919,7 @@ export default function App() {
         </footer>
 
         {/* ================= BOTTOM NAVIGATION ================= */}
-        <nav className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[400px] bg-white border-t border-slate-200 flex justify-around items-center py-2 z-30 shadow-lg">
+        <nav className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[400px] bg-white border-t border-slate-200 flex justify-around items-center py-2 z-30 shadow-lg print:hidden">
           <button
             onClick={() => setActiveTab('input')}
             className={`flex flex-col items-center gap-1 px-4 py-1 rounded-lg transition cursor-pointer ${
@@ -954,163 +954,6 @@ export default function App() {
           </button>
         </nav>
 
-      </div>
-
-      {/* =====================================================================
-          DOKUMEN LAPORAN RESMI UNTUK HRD (Hanya Tampil Saat Print / Save PDF)
-         ===================================================================== */}
-      <div className="hidden print:block w-full max-w-4xl mx-auto p-6 bg-white text-slate-900 font-sans">
-        {/* Kop Surat / Header Laporan */}
-        <div className="flex items-center justify-between border-b-2 border-blue-800 pb-4 mb-5">
-          <div className="flex items-center gap-4">
-            <img
-              src="image_f90204.png"
-              alt="Indofood CBP"
-              className="h-12 object-contain"
-            />
-            <div>
-              <h1 className="text-lg font-extrabold text-slate-900 uppercase tracking-wide">
-                Laporan Rekapitulasi Lembur Karyawan
-              </h1>
-              <p className="text-xs text-slate-600">
-                Dokumen Sinkronisasi Lembur Bulanan — Diserahkan kepada HRD
-              </p>
-            </div>
-          </div>
-          <div className="text-right text-xs text-slate-600">
-            <p className="font-bold text-slate-800">
-              Bulan: {NAMA_BULAN[selectedMonth]} {selectedYear}
-            </p>
-            <p>Cut-Off: {periodeLabel}</p>
-          </div>
-        </div>
-
-        {/* Informasi Karyawan & Ringkasan Total */}
-        <div className="grid grid-cols-2 gap-4 mb-5 text-xs">
-          <div className="border border-slate-300 rounded-lg p-3 space-y-1.5">
-            <h3 className="font-bold text-slate-700 uppercase border-b border-slate-200 pb-1 mb-1">
-              Data Karyawan
-            </h3>
-            <div className="flex justify-between">
-              <span className="text-slate-600">Nama Karyawan:</span>
-              <span className="font-bold text-slate-900">{nama.trim() || '-'}</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-slate-600">Gaji Pokok (Gapok):</span>
-              <span className="font-semibold text-slate-900">{formatRupiah(gapokNumber)}</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-slate-600">Upah Lembur / Jam Efektif (1/173):</span>
-              <span className="font-semibold text-slate-900">
-                {formatRupiah(Math.round(gapokNumber / 173))}
-              </span>
-            </div>
-          </div>
-
-          <div className="border border-blue-300 bg-blue-50/40 rounded-lg p-3 space-y-1.5">
-            <h3 className="font-bold text-blue-900 uppercase border-b border-blue-200 pb-1 mb-1">
-              Ringkasan Akumulasi Periode Ini
-            </h3>
-            <div className="flex justify-between">
-              <span className="text-slate-700">Total Hari Lembur:</span>
-              <span className="font-bold text-slate-900">{sortedForPrint.length} Hari</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-slate-700">Total Jam Aktual / Efektif:</span>
-              <span className="font-bold text-slate-900">
-                {totalAktual} Jam Aktual / {totalEfektif} Jam Efektif
-              </span>
-            </div>
-            <div className="flex justify-between text-sm pt-0.5">
-              <span className="font-bold text-blue-900">Total Estimasi Upah Lembur:</span>
-              <span className="font-extrabold text-blue-800">{formatRupiah(totalRupiah)}</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Tabel Rincian Harian */}
-        <table className="w-full border-collapse border border-slate-400 text-xs mb-6">
-          <thead>
-            <tr className="bg-slate-100 text-slate-800">
-              <th className="border border-slate-400 px-2.5 py-2 text-center w-10">No</th>
-              <th className="border border-slate-400 px-3 py-2 text-left">Tanggal</th>
-              <th className="border border-slate-400 px-3 py-2 text-left">Hari & Status Kalender Pabrik</th>
-              <th className="border border-slate-400 px-3 py-2 text-center">Jam Aktual</th>
-              <th className="border border-slate-400 px-3 py-2 text-center">Jam Efektif</th>
-              <th className="border border-slate-400 px-3 py-2 text-right">Estimasi Upah (Rp)</th>
-            </tr>
-          </thead>
-          <tbody>
-            {sortedForPrint.length === 0 ? (
-              <tr>
-                <td colSpan={6} className="border border-slate-400 px-3 py-6 text-center text-slate-500">
-                  Tidak ada data lembur pada periode {periodeLabel}.
-                </td>
-              </tr>
-            ) : (
-              sortedForPrint.map((item, idx) => {
-                const infoHari = cekHariLiburPabrik(item.tanggal);
-                return (
-                  <tr key={item.id} className="even:bg-slate-50/60">
-                    <td className="border border-slate-400 px-2.5 py-1.5 text-center">{idx + 1}</td>
-                    <td className="border border-slate-400 px-3 py-1.5 font-semibold">{item.tanggal}</td>
-                    <td className="border border-slate-400 px-3 py-1.5">
-                      <span className="font-medium">{infoHari.namaHari}</span> —{' '}
-                      <span className={item.isLibur ? 'font-bold text-red-700' : 'text-slate-700'}>
-                        {item.isLibur ? 'Hari Libur Pabrik / Minggu' : 'Hari Kerja Biasa'}
-                      </span>
-                    </td>
-                    <td className="border border-slate-400 px-3 py-1.5 text-center font-medium">
-                      {item.durasiAktual} Jam
-                    </td>
-                    <td className="border border-slate-400 px-3 py-1.5 text-center font-bold">
-                      {item.durasiEfektif} Jam
-                    </td>
-                    <td className="border border-slate-400 px-3 py-1.5 text-right font-semibold">
-                      {formatRupiah(item.estimasiUang)}
-                    </td>
-                  </tr>
-                );
-              })
-            )}
-          </tbody>
-          <tfoot>
-            <tr className="bg-slate-100 font-bold text-slate-900">
-              <td colSpan={3} className="border border-slate-400 px-3 py-2 text-right uppercase">
-                Total Akumulasi
-              </td>
-              <td className="border border-slate-400 px-3 py-2 text-center">{totalAktual} Jam</td>
-              <td className="border border-slate-400 px-3 py-2 text-center">{totalEfektif} Jam</td>
-              <td className="border border-slate-400 px-3 py-2 text-right text-blue-900">
-                {formatRupiah(totalRupiah)}
-              </td>
-            </tr>
-          </tfoot>
-        </table>
-
-        {/* Kolom Tanda Tangan Verifikasi Karyawan & HRD */}
-        <div className="grid grid-cols-2 gap-8 mt-10 text-xs text-center">
-          <div>
-            <p className="text-slate-600 mb-14">Dibuat & Diajukan Oleh,</p>
-            <p className="font-bold text-slate-900 underline">
-              {nama.trim() || '( ........................................ )'}
-            </p>
-            <p className="text-slate-500 mt-0.5">Karyawan</p>
-          </div>
-          <div>
-            <p className="text-slate-600 mb-14">Diperiksa & Disinkronisasi Oleh,</p>
-            <p className="font-bold text-slate-900 underline">
-              ( ........................................ )
-            </p>
-            <p className="text-slate-500 mt-0.5">HRD / Personalia</p>
-          </div>
-        </div>
-
-        {/* Footer Cetak */}
-        <div className="mt-10 pt-3 border-t border-slate-200 flex justify-between text-[10px] text-slate-400">
-          <span>Dicetak pada: {new Date().toLocaleString('id-ID')}</span>
-          <span>Sistem Kalkulator Lembur Karyawan — Author by Muhammad Padli Azhim</span>
-        </div>
       </div>
     </div>
   );
