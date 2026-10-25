@@ -957,124 +957,128 @@ export default function App() {
       </div>
 
       {/* =====================================================================
-          TAMPILAN CETAK PDF (Tabel Rekapan Menarik & Rapi Tanpa Kolom TTD)
+          TAMPILAN CETAK PDF (A4 Landscape Compact - Muat 1 Halaman Penuh 31 Hari)
          ===================================================================== */}
-      <div className="hidden print:block w-full max-w-4xl mx-auto p-6 bg-white text-slate-800 font-sans">
-        {/* Header Banner Modern */}
-        <div className="flex items-center justify-between border-b-4 border-blue-700 pb-4 mb-5">
-          <div className="flex items-center gap-4">
+      <div className="hidden print:block w-full max-w-none mx-auto px-2 py-1 bg-white text-slate-800 font-sans">
+        {/* Header Banner Compact */}
+        <div className="flex items-center justify-between border-b-2 border-blue-700 pb-2 mb-2.5">
+          <div className="flex items-center gap-3">
             <img
               src="image_f90204.png"
               alt="Indofood CBP"
-              className="h-11 object-contain"
+              className="h-8 object-contain"
             />
-            <div className="border-l-2 border-slate-200 pl-4">
-              <h1 className="text-lg font-extrabold text-slate-900 tracking-tight">
+            <div className="border-l-2 border-slate-200 pl-3">
+              <h1 className="text-sm font-extrabold text-slate-900 tracking-tight leading-tight">
                 REKAPAN ABSENSI LEMBUR KARYAWAN
               </h1>
-              <p className="text-xs text-slate-500 font-medium">
+              <p className="text-[10px] text-slate-500 font-medium">
                 Periode Cut-Off: <span className="text-blue-700 font-bold">{periodeLabel}</span>
               </p>
             </div>
           </div>
-          <div className="bg-blue-50 border border-blue-200 rounded-xl px-4 py-2 text-right">
-            <span className="text-[10px] font-bold uppercase tracking-wider text-blue-600 block">
+          <div className="bg-blue-50 border border-blue-200 rounded-lg px-3 py-1 text-right">
+            <span className="text-[9px] font-bold uppercase tracking-wider text-blue-600 block leading-none">
               Bulan Rekapan
             </span>
-            <span className="text-sm font-extrabold text-blue-900">
+            <span className="text-xs font-extrabold text-blue-900">
               {NAMA_BULAN[selectedMonth]} {selectedYear}
             </span>
           </div>
         </div>
 
-        {/* Kartu Ringkasan Informasi & Total (Grid 4 Kolom Menarik) */}
-        <div className="grid grid-cols-4 gap-3 mb-5">
-          <div className="bg-slate-50 border border-slate-200 rounded-xl p-3">
-            <span className="text-[10px] font-bold uppercase text-slate-400 block">
-              Nama Karyawan
-            </span>
-            <span className="text-sm font-bold text-slate-800 mt-0.5 block truncate">
-              {nama.trim() || 'Karyawan'}
-            </span>
-            <span className="text-[11px] text-slate-500 mt-0.5 block">
-              Gapok: {formatRupiah(gapokNumber)}
+        {/* Kartu Ringkasan Informasi & Total (Compact 4 Kolom) */}
+        <div className="grid grid-cols-4 gap-2 mb-2.5">
+          <div className="bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 flex items-center justify-between">
+            <div>
+              <span className="text-[9px] font-bold uppercase text-slate-400 block leading-none">
+                Nama Karyawan
+              </span>
+              <span className="text-xs font-bold text-slate-800 mt-0.5 block truncate">
+                {nama.trim() || 'Karyawan'}
+              </span>
+            </div>
+            <div className="text-right">
+              <span className="text-[9px] text-slate-400 block leading-none">Gaji Pokok</span>
+              <span className="text-[11px] font-semibold text-slate-700 mt-0.5 block">
+                {formatRupiah(gapokNumber)}
+              </span>
+            </div>
+          </div>
+
+          <div className="bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 flex items-center justify-between">
+            <div>
+              <span className="text-[9px] font-bold uppercase text-slate-400 block leading-none">
+                Total Jam Aktual
+              </span>
+              <span className="text-xs font-extrabold text-slate-800 mt-0.5 block">
+                {totalAktual} Jam
+              </span>
+            </div>
+            <span className="text-[10px] bg-slate-200/70 text-slate-700 font-semibold px-2 py-0.5 rounded-full">
+              {sortedForPrint.length} Hari
             </span>
           </div>
 
-          <div className="bg-slate-50 border border-slate-200 rounded-xl p-3">
-            <span className="text-[10px] font-bold uppercase text-slate-400 block">
-              Total Jam Aktual
-            </span>
-            <span className="text-base font-extrabold text-slate-800 mt-0.5 block">
-              {totalAktual} Jam
-            </span>
-            <span className="text-[11px] text-slate-500 mt-0.5 block">
-              {sortedForPrint.length} Hari Lembur
-            </span>
+          <div className="bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 flex items-center justify-between">
+            <div>
+              <span className="text-[9px] font-bold uppercase text-slate-400 block leading-none">
+                Total Jam Efektif
+              </span>
+              <span className="text-xs font-extrabold text-blue-700 mt-0.5 block">
+                {totalEfektif} Jam
+              </span>
+            </div>
+            <div className="text-right">
+              <span className="text-[9px] text-slate-400 block leading-none">Tarif / Jam</span>
+              <span className="text-[10px] font-semibold text-slate-600 mt-0.5 block">
+                {formatRupiah(Math.round(gapokNumber / 173))}
+              </span>
+            </div>
           </div>
 
-          <div className="bg-slate-50 border border-slate-200 rounded-xl p-3">
-            <span className="text-[10px] font-bold uppercase text-slate-400 block">
-              Total Jam Efektif
-            </span>
-            <span className="text-base font-extrabold text-blue-700 mt-0.5 block">
-              {totalEfektif} Jam
-            </span>
-            <span className="text-[11px] text-slate-500 mt-0.5 block">
-              Tarif/Jam: {formatRupiah(Math.round(gapokNumber / 173))}
-            </span>
-          </div>
-
-          <div className="bg-gradient-to-br from-blue-600 to-blue-800 text-white rounded-xl p-3 shadow-sm">
-            <span className="text-[10px] font-bold uppercase text-blue-100 block">
-              Total Estimasi Lembur
-            </span>
-            <span className="text-base font-extrabold mt-0.5 block">
-              {formatRupiah(totalRupiah)}
-            </span>
-            <span className="text-[10px] text-blue-200 mt-0.5 block">
-              Akumulasi Periode Ini
-            </span>
+          <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white rounded-lg px-3 py-1.5 flex items-center justify-between shadow-xs">
+            <div>
+              <span className="text-[9px] font-bold uppercase text-blue-100 block leading-none">
+                Total Estimasi Lembur
+              </span>
+              <span className="text-sm font-extrabold mt-0.5 block">
+                {formatRupiah(totalRupiah)}
+              </span>
+            </div>
+            <Wallet size={16} className="text-blue-200 shrink-0" />
           </div>
         </div>
 
-        {/* Tabel Rekapan Lembur Modern */}
-        <div className="rounded-xl overflow-hidden border border-slate-300 shadow-xs">
-          <table className="w-full border-collapse text-xs">
-            <thead>
-              <tr className="bg-blue-700 text-white uppercase tracking-wider text-[11px]">
-                <th className="py-2.5 px-3 text-center w-10 font-bold">No</th>
-                <th className="py-2.5 px-3 text-left font-bold">Tanggal</th>
-                <th className="py-2.5 px-3 text-left font-bold">Hari</th>
-                <th className="py-2.5 px-3 text-center font-bold">Kategori Kalender Pabrik</th>
-                <th className="py-2.5 px-3 text-center font-bold">Jam Aktual</th>
-                <th className="py-2.5 px-3 text-center font-bold">Jam Efektif</th>
-                <th className="py-2.5 px-3 text-right font-bold">Estimasi Upah</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-200">
-              {sortedForPrint.length === 0 ? (
-                <tr>
-                  <td colSpan={7} className="py-8 text-center text-slate-400 italic">
-                    Belum ada data lembur pada periode {periodeLabel}.
-                  </td>
+        {/* Tabel Rekapan Lembur Compact (1 Kolom jika <= 15 hari, Otomatis 2 Kolom Berdampingan jika > 15 hari agar selalu muat 1 halaman) */}
+        {sortedForPrint.length === 0 ? (
+          <div className="rounded-lg border border-slate-300 py-8 text-center text-xs text-slate-400 italic">
+            Belum ada data lembur pada periode {periodeLabel}.
+          </div>
+        ) : sortedForPrint.length <= 15 ? (
+          <div className="rounded-lg overflow-hidden border border-slate-300">
+            <table className="w-full border-collapse text-[10px]">
+              <thead>
+                <tr className="bg-blue-700 text-white uppercase tracking-wider text-[9px]">
+                  <th className="py-1.5 px-2 text-center w-8 font-bold">No</th>
+                  <th className="py-1.5 px-2.5 text-left font-bold">Tanggal</th>
+                  <th className="py-1.5 px-2.5 text-left font-bold">Hari</th>
+                  <th className="py-1.5 px-2.5 text-center font-bold">Kategori Kalender Pabrik</th>
+                  <th className="py-1.5 px-2.5 text-center font-bold">Jam Aktual</th>
+                  <th className="py-1.5 px-2.5 text-center font-bold">Jam Efektif</th>
+                  <th className="py-1.5 px-2.5 text-right font-bold">Estimasi Upah</th>
                 </tr>
-              ) : (
-                sortedForPrint.map((item, idx) => {
+              </thead>
+              <tbody className="divide-y divide-slate-200">
+                {sortedForPrint.map((item, idx) => {
                   const infoHari = cekHariLiburPabrik(item.tanggal);
                   return (
                     <tr key={item.id} className="even:bg-slate-50">
-                      <td className="py-2 px-3 text-center text-slate-500 font-medium">
-                        {idx + 1}
-                      </td>
-                      <td className="py-2 px-3 font-bold text-slate-800">
-                        {item.tanggal}
-                      </td>
-                      <td className="py-2 px-3 text-slate-700 font-medium">
-                        {infoHari.namaHari}
-                      </td>
-                      <td className="py-2 px-3 text-center">
-                        <span className={`inline-block px-2.5 py-0.5 rounded-full text-[10px] font-bold ${
+                      <td className="py-1 px-2 text-center text-slate-500 font-medium">{idx + 1}</td>
+                      <td className="py-1 px-2.5 font-bold text-slate-800">{item.tanggal}</td>
+                      <td className="py-1 px-2.5 text-slate-700 font-medium">{infoHari.namaHari}</td>
+                      <td className="py-1 px-2.5 text-center">
+                        <span className={`inline-block px-2 py-0.2 rounded-full text-[9px] font-bold ${
                           item.isLibur
                             ? 'bg-red-100 text-red-700 border border-red-200'
                             : 'bg-emerald-100 text-emerald-700 border border-emerald-200'
@@ -1082,41 +1086,104 @@ export default function App() {
                           {item.isLibur ? 'Hari Libur' : 'Hari Biasa'}
                         </span>
                       </td>
-                      <td className="py-2 px-3 text-center font-semibold text-slate-700">
-                        {item.durasiAktual} Jam
-                      </td>
-                      <td className="py-2 px-3 text-center font-bold text-blue-700">
-                        {item.durasiEfektif} Jam
-                      </td>
-                      <td className="py-2 px-3 text-right font-bold text-slate-900">
-                        {formatRupiah(item.estimasiUang)}
-                      </td>
+                      <td className="py-1 px-2.5 text-center font-semibold text-slate-700">{item.durasiAktual}j</td>
+                      <td className="py-1 px-2.5 text-center font-bold text-blue-700">{item.durasiEfektif}j</td>
+                      <td className="py-1 px-2.5 text-right font-bold text-slate-900">{formatRupiah(item.estimasiUang)}</td>
                     </tr>
                   );
-                })
-              )}
-            </tbody>
-            <tfoot>
-              <tr className="bg-blue-50 border-t-2 border-blue-300 font-extrabold text-slate-900 text-xs">
-                <td colSpan={4} className="py-2.5 px-3 text-right uppercase text-blue-900">
-                  Total Keseluruhan
-                </td>
-                <td className="py-2.5 px-3 text-center text-slate-800">
-                  {totalAktual} Jam
-                </td>
-                <td className="py-2.5 px-3 text-center text-blue-800">
-                  {totalEfektif} Jam
-                </td>
-                <td className="py-2.5 px-3 text-right text-blue-800 text-sm">
-                  {formatRupiah(totalRupiah)}
-                </td>
-              </tr>
-            </tfoot>
-          </table>
-        </div>
+                })}
+              </tbody>
+              <tfoot>
+                <tr className="bg-blue-50 border-t-2 border-blue-300 font-extrabold text-slate-900 text-[10px]">
+                  <td colSpan={4} className="py-1.5 px-2.5 text-right uppercase text-blue-900">
+                    Total Keseluruhan
+                  </td>
+                  <td className="py-1.5 px-2.5 text-center text-slate-800">{totalAktual} Jam</td>
+                  <td className="py-1.5 px-2.5 text-center text-blue-800">{totalEfektif} Jam</td>
+                  <td className="py-1.5 px-2.5 text-right text-blue-800 text-xs">{formatRupiah(totalRupiah)}</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        ) : (
+          /* Mode 2 Tabel Berdampingan (Kiri: No 1-16, Kanan: No 17-31) agar 31 hari muat 1 halaman Landscape */
+          <div className="space-y-2">
+            <div className="grid grid-cols-2 gap-2.5 items-start">
+              {[
+                sortedForPrint.slice(0, Math.ceil(sortedForPrint.length / 2)),
+                sortedForPrint.slice(Math.ceil(sortedForPrint.length / 2))
+              ].map((chunk, colIdx) => {
+                const startNum = colIdx === 0 ? 1 : Math.ceil(sortedForPrint.length / 2) + 1;
+                return (
+                  <div key={colIdx} className="rounded-lg overflow-hidden border border-slate-300">
+                    <table className="w-full border-collapse text-[9.5px]">
+                      <thead>
+                        <tr className="bg-blue-700 text-white uppercase tracking-wider text-[8.5px]">
+                          <th className="py-1 px-1.5 text-center w-6 font-bold">No</th>
+                          <th className="py-1 px-2 text-left font-bold">Tanggal</th>
+                          <th className="py-1 px-1.5 text-left font-bold">Hari</th>
+                          <th className="py-1 px-1.5 text-center font-bold">Status</th>
+                          <th className="py-1 px-1.5 text-center font-bold">Aktual</th>
+                          <th className="py-1 px-1.5 text-center font-bold">Efektif</th>
+                          <th className="py-1 px-2 text-right font-bold">Estimasi Upah</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-slate-200">
+                        {chunk.map((item, idx) => {
+                          const infoHari = cekHariLiburPabrik(item.tanggal);
+                          return (
+                            <tr key={item.id} className="even:bg-slate-50">
+                              <td className="py-0.5 px-1.5 text-center text-slate-500 font-medium">
+                                {startNum + idx}
+                              </td>
+                              <td className="py-0.5 px-2 font-bold text-slate-800">{item.tanggal}</td>
+                              <td className="py-0.5 px-1.5 text-slate-700 font-medium">{infoHari.namaHari}</td>
+                              <td className="py-0.5 px-1.5 text-center">
+                                <span className={`inline-block px-1.5 rounded-full text-[8px] font-bold ${
+                                  item.isLibur
+                                    ? 'bg-red-100 text-red-700'
+                                    : 'bg-emerald-100 text-emerald-700'
+                                }`}>
+                                  {item.isLibur ? 'Libur' : 'Biasa'}
+                                </span>
+                              </td>
+                              <td className="py-0.5 px-1.5 text-center font-semibold text-slate-700">
+                                {item.durasiAktual}j
+                              </td>
+                              <td className="py-0.5 px-1.5 text-center font-bold text-blue-700">
+                                {item.durasiEfektif}j
+                              </td>
+                              <td className="py-0.5 px-2 text-right font-bold text-slate-900">
+                                {formatRupiah(item.estimasiUang)}
+                              </td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </table>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Baris Total Keseluruhan di Bawah Kedua Tabel */}
+            <div className="bg-blue-50 border-2 border-blue-300 rounded-lg px-4 py-1.5 flex items-center justify-between text-xs font-extrabold text-blue-900">
+              <span className="uppercase tracking-wide">
+                Total Akumulasi Periode ({sortedForPrint.length} Hari Lembur)
+              </span>
+              <div className="flex items-center gap-6">
+                <span>Total Jam Aktual: <strong className="text-slate-900">{totalAktual} Jam</strong></span>
+                <span>Total Jam Efektif: <strong className="text-blue-800">{totalEfektif} Jam</strong></span>
+                <span className="text-sm bg-blue-700 text-white px-3 py-0.5 rounded-md">
+                  Total Upah: {formatRupiah(totalRupiah)}
+                </span>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Footer Kecil */}
-        <div className="mt-4 flex justify-between items-center text-[10px] text-slate-400">
+        <div className="mt-2 flex justify-between items-center text-[9px] text-slate-400">
           <span>Dicetak pada: {new Date().toLocaleString('id-ID')}</span>
           <span>Author by Muhammad Padli Azhim</span>
         </div>

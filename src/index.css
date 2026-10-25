@@ -2,8 +2,8 @@
 
 @media print {
   @page {
-    size: A4 portrait;
-    margin: 12mm;
+    size: A4 landscape;
+    margin: 7mm 9mm;
   }
   body {
     background: #ffffff !important;
