@@ -595,23 +595,23 @@ export default function App() {
         {/* ================= HEADER ================= */}
         <header className="bg-white border-b-4 border-blue-700 px-4 pt-3 pb-3 sticky top-0 z-20 shadow-sm print:static">
           <div className="flex items-center justify-between gap-2">
-            {/* Sisi Kiri (Lingkaran Merah): OTW-In Efek Typography 3D Gradasi & Outline */}
+            {/* Sisi Kiri (Lingkaran Merah): OTW-In Efek Typography 3D Gradasi & Outline dibuat Lebih Besar */}
             <div className="flex flex-col text-left">
-              <span className="otw-badge-title text-xl font-black italic tracking-wide leading-none select-none">
+              <span className="otw-badge-title text-2xl font-black italic tracking-wide leading-none select-none">
                 OTW-In
               </span>
-              <span className="text-[9.5px] font-bold text-emerald-700 tracking-tight leading-tight mt-1 flex items-center gap-1">
+              <span className="text-[10px] font-bold text-emerald-700 tracking-tight leading-tight mt-1 flex items-center gap-1">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block animate-pulse"></span>
                 Overtime Tracking Web Instan
               </span>
             </div>
 
-            {/* Sisi Kanan (Lingkaran Hijau): Logo Indofood CBP Dibuat Lebih Kecil */}
+            {/* Sisi Kanan (Lingkaran Hijau): Logo Indofood CBP Dibuat Lebih Kecil & Manis */}
             <div className="flex items-center justify-end">
               <img 
                 src="image_f90204.png" 
                 alt="Indofood CBP" 
-                className="h-7 object-contain"
+                className="h-5 max-w-[100px] object-contain"
               />
             </div>
           </div>
