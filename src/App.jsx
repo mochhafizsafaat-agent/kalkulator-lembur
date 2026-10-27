@@ -593,13 +593,29 @@ export default function App() {
         )}
 
         {/* ================= HEADER ================= */}
-        <header className="bg-white border-b-4 border-blue-700 px-4 pt-4 pb-3 sticky top-0 z-20 shadow-sm print:static">
-          <img 
-            src="image_f90204.png" 
-            alt="Indofood CBP" 
-            className="h-10 mx-auto object-contain"
-          />
-          <div className="mt-3 bg-blue-600 text-white px-4 py-2 rounded-lg shadow-inner text-center font-semibold text-sm tracking-wide">
+        <header className="bg-white border-b-4 border-blue-700 px-4 pt-3 pb-3 sticky top-0 z-20 shadow-sm print:static">
+          <div className="flex items-center justify-between gap-2">
+            {/* Sisi Kiri (Lingkaran Merah): OTW-In & Kepanjangan Warna Hijau */}
+            <div className="flex flex-col text-left">
+              <span className="text-base font-black tracking-wider text-emerald-600 leading-none">
+                OTW-In
+              </span>
+              <span className="text-[9.5px] font-semibold text-emerald-600 tracking-tight leading-tight mt-0.5">
+                Overtime Tracking Web Instan
+              </span>
+            </div>
+
+            {/* Sisi Kanan (Lingkaran Hijau): Logo Indofood CBP Dibuat Lebih Kecil */}
+            <div className="flex items-center justify-end">
+              <img 
+                src="image_f90204.png" 
+                alt="Indofood CBP" 
+                className="h-7 object-contain"
+              />
+            </div>
+          </div>
+
+          <div className="mt-2.5 bg-blue-600 text-white px-4 py-2 rounded-lg shadow-inner text-center font-semibold text-sm tracking-wide">
             Halo, {nama.trim() ? nama : 'Karyawan'}
           </div>
           <div className="mt-1.5 flex items-center justify-center gap-1 text-[11px] text-emerald-600 font-medium print:hidden">
