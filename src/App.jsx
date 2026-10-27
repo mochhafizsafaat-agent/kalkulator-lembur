@@ -1028,7 +1028,7 @@ export default function App() {
             />
             <div className="border-l-2 border-slate-200 pl-3">
               <h1 className="text-sm font-extrabold text-slate-900 tracking-tight leading-tight">
-                REKAPAN ABSENSI LEMBUR KARYAWAN
+                REKAPAN LEMBURAN KARYAWAN
               </h1>
               <p className="text-[10px] text-slate-500 font-medium">
                 Periode Cut-Off: <span className="text-blue-700 font-bold">{periodeLabel}</span>
