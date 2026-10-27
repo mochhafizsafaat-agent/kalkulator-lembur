@@ -108,6 +108,16 @@ const formatRupiah = (angka) => {
   }).format(angka);
 };
 
+/**
+ * Format angka integer dengan pemisah ribuan titik (contoh: 4500000 -> 4.500.000)
+ */
+const formatRibuan = (val) => {
+  if (val === undefined || val === null || val === '') return '';
+  const cleanDigits = String(val).replace(/\D/g, '');
+  if (!cleanDigits) return '';
+  return cleanDigits.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+};
+
 const NAMA_BULAN = [
   'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
   'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
@@ -910,13 +920,16 @@ export default function App() {
                     Gaji Pokok (Rp)
                   </label>
                   <input
-                    type="number"
-                    min="0"
-                    placeholder="Contoh: 4500000"
-                    value={gapok}
-                    onChange={(e) => setGapok(e.target.value)}
+                    type="text"
+                    inputMode="numeric"
+                    placeholder="Contoh: 4.500.000"
+                    value={formatRibuan(gapok)}
+                    onChange={(e) => {
+                      const digitsOnly = e.target.value.replace(/\D/g, '');
+                      setGapok(digitsOnly);
+                    }}
                     required
-                    className="w-full border border-slate-300 rounded-lg px-3 py-2.5 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full border border-slate-300 rounded-lg px-3 py-2.5 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 font-medium"
                   />
                   {gapokNumber > 0 && (
                     <p className="text-xs text-slate-500 mt-1">
