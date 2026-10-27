@@ -496,12 +496,12 @@ export default function App() {
     }
   };
 
-  // 6. Filter Rekapan Berdasarkan Cut-Off (26 bulan lalu s/d 25 bulan terpilih)
+  // 6. Filter Rekapan Berdasarkan Kalender Bulanan (Tanggal 1 s/d Akhir Bulan terpilih)
   const { filteredLembur, sortedForPrint, periodeLabel, totalAktual, totalEfektif, totalRupiah } = useMemo(() => {
-    // Tanggal mulai: 26 bulan sebelumnya
-    const startDateObj = new Date(selectedYear, selectedMonth - 1, 26);
-    // Tanggal selesai: 25 bulan terpilih
-    const endDateObj = new Date(selectedYear, selectedMonth, 25);
+    // Tanggal mulai: Tanggal 1 pada bulan terpilih
+    const startDateObj = new Date(selectedYear, selectedMonth, 1);
+    // Tanggal selesai: Hari terakhir pada bulan terpilih (day 0 di bulan berikutnya)
+    const endDateObj = new Date(selectedYear, selectedMonth + 1, 0);
 
     const formatYMD = (d) => {
       const yr = d.getFullYear();
@@ -517,15 +517,15 @@ export default function App() {
       return item.tanggal >= startStr && item.tanggal <= endStr;
     });
 
-    // Urutkan kronologis dari tanggal awal ke akhir untuk laporan cetak PDF ke HRD
+    // Urutkan kronologis dari tanggal awal ke akhir untuk laporan cetak PDF
     const chronological = [...filtered].sort((a, b) => (a.tanggal > b.tanggal ? 1 : -1));
 
     const tAktual = filtered.reduce((acc, curr) => acc + (Number(curr.durasiAktual) || 0), 0);
     const tEfektif = filtered.reduce((acc, curr) => acc + (Number(curr.durasiEfektif) || 0), 0);
     const tRupiah = filtered.reduce((acc, curr) => acc + (Number(curr.estimasiUang) || 0), 0);
 
-    const labelStart = `26 ${NAMA_BULAN[startDateObj.getMonth()]} ${startDateObj.getFullYear()}`;
-    const labelEnd = `25 ${NAMA_BULAN[endDateObj.getMonth()]} ${endDateObj.getFullYear()}`;
+    const labelStart = `1 ${NAMA_BULAN[startDateObj.getMonth()]} ${startDateObj.getFullYear()}`;
+    const labelEnd = `${endDateObj.getDate()} ${NAMA_BULAN[endDateObj.getMonth()]} ${endDateObj.getFullYear()}`;
 
     return {
       filteredLembur: filtered,
