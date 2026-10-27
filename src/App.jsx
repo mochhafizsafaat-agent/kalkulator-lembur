@@ -819,25 +819,25 @@ export default function App() {
                 </div>
               </div>
 
-              {/* Card Total Akumulasi */}
-              <div className="bg-gradient-to-br from-blue-600 to-blue-800 text-white p-4 rounded-xl shadow-md space-y-3">
-                <div className="flex items-center justify-between border-b border-blue-500 pb-2">
+              {/* Card Total Akumulasi (Kompatibel untuk Safari iOS & Semua Browser HP) */}
+              <div className="bg-blue-600 [background-image:linear-gradient(135deg,#2563eb,#1d4ed8)] text-white p-4 rounded-xl shadow-md space-y-3">
+                <div className="flex items-center justify-between border-b border-blue-400/50 pb-2">
                   <span className="text-xs uppercase tracking-wider text-blue-100 font-semibold">
                     Total Estimasi Pendapatan
                   </span>
                   <Wallet size={18} className="text-blue-200" />
                 </div>
-                <div className="text-2xl font-extrabold tracking-tight">
+                <div className="text-2xl font-extrabold tracking-tight text-white">
                   {formatRupiah(totalRupiah)}
                 </div>
-                <div className="grid grid-cols-2 gap-2 pt-1 border-t border-blue-500/60 text-xs">
-                  <div className="bg-blue-900/40 p-2 rounded-lg">
-                    <span className="text-blue-200 block">Total Jam Aktual</span>
-                    <span className="text-base font-bold">{totalAktual} Jam</span>
+                <div className="grid grid-cols-2 gap-2 pt-1 border-t border-blue-400/50 text-xs">
+                  <div className="bg-blue-800/80 p-2 rounded-lg border border-blue-400/30">
+                    <span className="text-blue-100 block text-[11px]">Total Jam Aktual</span>
+                    <span className="text-base font-bold text-white">{totalAktual} Jam</span>
                   </div>
-                  <div className="bg-blue-900/40 p-2 rounded-lg">
-                    <span className="text-blue-200 block">Total Jam Efektif</span>
-                    <span className="text-base font-bold">{totalEfektif} Jam</span>
+                  <div className="bg-blue-800/80 p-2 rounded-lg border border-blue-400/30">
+                    <span className="text-blue-100 block text-[11px]">Total Jam Efektif</span>
+                    <span className="text-base font-bold text-white">{totalEfektif} Jam</span>
                   </div>
                 </div>
               </div>
