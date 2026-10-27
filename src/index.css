@@ -1,5 +1,18 @@
 @import "tailwindcss";
 
+/* Efek Teks 3D Typography "OTW-In" (Gradasi Hijau Segar + Multi-layer Outline Putih & Hijau Neon ala Gambar) */
+.otw-badge-title {
+  background: linear-gradient(180deg, #4ade80 0%, #16a34a 45%, #15803d 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 2px 0 #ffffff)
+          drop-shadow(0 -1.5px 0 #ffffff)
+          drop-shadow(1.5px 0 0 #ffffff)
+          drop-shadow(-1.5px 0 0 #ffffff)
+          drop-shadow(0 3px 0 #15803d)
+          drop-shadow(0 4px 2px rgba(22, 101, 52, 0.45));
+}
+
 @media print {
   @page {
     size: A4 landscape;
