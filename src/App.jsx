@@ -399,6 +399,11 @@ export default function App() {
 
   const infoTanggalPabrik = useMemo(() => cekHariLiburPabrik(tanggal), [tanggal]);
 
+  // Cek apakah tanggal yang dipilih pada form input sudah pernah disimpan sebelumnya
+  const entriTanggalDuplikat = useMemo(() => {
+    return lemburList.find((item) => item.tanggal === tanggal);
+  }, [lemburList, tanggal]);
+
   // 4. Simpan Profil Manual (Tombol Simpan tetap disediakan untuk konfirmasi visual)
   const handleSimpanProfil = async (e) => {
     e.preventDefault();
@@ -438,6 +443,11 @@ export default function App() {
     if (!user) return;
     if (gapokNumber <= 0) {
       showNotif('Harap isi Gaji Pokok terlebih dahulu di menu Profil!', 'error');
+      return;
+    }
+
+    if (entriTanggalDuplikat) {
+      showNotif(`Tanggal ${tanggal} sudah pernah diinput! Silakan hapus data sebelumnya di menu Rekapan jika ingin mengganti.`, 'error');
       return;
     }
 
@@ -630,16 +640,30 @@ export default function App() {
                         value={tanggal}
                         onChange={handleTanggalChange}
                         required
-                        className="w-full border border-slate-300 rounded-lg px-3 py-2.5 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className={`w-full border rounded-lg px-3 py-2.5 text-sm text-slate-800 focus:outline-none focus:ring-2 ${
+                          entriTanggalDuplikat 
+                            ? 'border-red-500 focus:ring-red-500 bg-red-50/40' 
+                            : 'border-slate-300 focus:ring-blue-500'
+                        }`}
                       />
                     </div>
-                    {tanggal && (
+                    {entriTanggalDuplikat ? (
+                      <div className="mt-2 bg-red-50 border border-red-200 rounded-lg p-2.5 text-xs text-red-700 flex items-start gap-2">
+                        <AlertCircle className="shrink-0 text-red-600 mt-0.5" size={16} />
+                        <div>
+                          <p className="font-bold">Tanggal ini sudah ada dalam rekapan!</p>
+                          <p className="mt-0.5 text-[11px] text-red-600 leading-relaxed">
+                            Sudah ada input lembur <strong>{entriTanggalDuplikat.durasiAktual} jam</strong> pada tanggal <strong>{tanggal}</strong>. Untuk mengubah atau menginput ulang, silakan hapus data tanggal ini terlebih dahulu di menu <strong>Rekapan</strong>.
+                          </p>
+                        </div>
+                      </div>
+                    ) : tanggal ? (
                       <p className={`text-xs mt-1.5 font-medium ${
                         infoTanggalPabrik.isLibur ? 'text-red-600' : 'text-emerald-700'
                       }`}>
                         Status Kalender Pabrik: <strong>{infoTanggalPabrik.keterangan}</strong>
                       </p>
-                    )}
+                    ) : null}
                   </div>
 
                   {/* Checkbox Hari Libur */}
@@ -700,10 +724,14 @@ export default function App() {
                   {/* Tombol Simpan */}
                   <button
                     type="submit"
-                    disabled={savingLembur}
-                    className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-semibold py-2.5 rounded-lg shadow transition text-sm cursor-pointer"
+                    disabled={savingLembur || Boolean(entriTanggalDuplikat)}
+                    className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-slate-300 disabled:cursor-not-allowed disabled:text-slate-500 text-white font-semibold py-2.5 rounded-lg shadow transition text-sm cursor-pointer"
                   >
-                    {savingLembur ? 'Menyimpan...' : 'Simpan Data Lembur'}
+                    {savingLembur 
+                      ? 'Menyimpan...' 
+                      : entriTanggalDuplikat 
+                        ? 'Tanggal Sudah Diinput (Terkunci)' 
+                        : 'Simpan Data Lembur'}
                   </button>
                 </form>
               )}
