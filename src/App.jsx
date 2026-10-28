@@ -693,24 +693,15 @@ export default function App() {
                     ) : null}
                   </div>
 
-                  {/* Checkbox Hari Libur */}
-                  <div className="flex items-center justify-between bg-slate-50 p-3 rounded-lg border border-slate-200">
-                    <div>
-                      <label htmlFor="hariLibur" className="text-sm font-semibold text-slate-700 cursor-pointer">
-                        Hari Libur Pabrik / Minggu
-                      </label>
-                      <p className="text-xs text-slate-500">
-                        Mengacu Kalender Pabrik (Minggu & libur resmi pabrik seperti 25 Des otomatis aktif; 10 Nov tetap Hari Biasa)
-                      </p>
-                    </div>
-                    <input
-                      id="hariLibur"
-                      type="checkbox"
-                      checked={isLibur}
-                      onChange={(e) => setIsLibur(e.target.checked)}
-                      className="w-5 h-5 accent-blue-600 rounded cursor-pointer"
-                    />
-                  </div>
+                  {/* Checkbox Hari Libur (Disembunyikan dari UI, tetapi fungsi logika Kalender Pabrik tetap aktif 100%) */}
+                  <input
+                    type="checkbox"
+                    checked={isLibur}
+                    onChange={(e) => setIsLibur(e.target.checked)}
+                    className="hidden"
+                    tabIndex={-1}
+                    aria-hidden="true"
+                  />
 
                   {/* Input Durasi */}
                   <div>
